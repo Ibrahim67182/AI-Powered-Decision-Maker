@@ -1,10 +1,8 @@
-
-// AI assistant panel UI component
-
 'use client';
 
 import { useState } from 'react';
 import { Decision } from '@/lib/types';
+import { runMockAssistant } from '@/lib/mockAssistant';
 
 interface Recommendation {
   recommendedOptionId: string;
@@ -42,11 +40,25 @@ export default function AssistantPanel({ decision }: Props) {
     setLoading(true);
     setResult(null);
 
+    // Mock mode: run entirely client-side, no network call, no API involved at all.
+    if (useMock) {
+      try {
+        const { recommendation, trace } = runMockAssistant(decision);
+        setResult({ recommendation, trace, mode: 'mock' });
+      } catch {
+        setResult({ error: 'Could not generate a demo recommendation for this decision.' });
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // Live mode: hits your Next.js API route, which calls Groq server-side.
     try {
       const res = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, decision, useMock }),
+        body: JSON.stringify({ question, decision }),
       });
       const data: AssistantResponse = await res.json();
       setResult(data);
@@ -91,7 +103,7 @@ export default function AssistantPanel({ decision }: Props) {
           <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
           <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse [animation-delay:150ms]" />
           <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse [animation-delay:300ms]" />
-          <span className="ml-2">Consulting the decision engine…</span>
+          <span className="ml-2">{useMock ? 'Running deterministic engine…' : 'Consulting the AI assistant…'}</span>
         </div>
       )}
 
@@ -107,9 +119,7 @@ export default function AssistantPanel({ decision }: Props) {
             {result.mode && (
               <span
                 className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                  result.mode === 'mock'
-                    ? 'bg-zinc-700 text-zinc-300'
-                    : 'bg-amber-400 text-zinc-900'
+                  result.mode === 'mock' ? 'bg-zinc-700 text-zinc-300' : 'bg-amber-400 text-zinc-900'
                 }`}
               >
                 {result.mode === 'mock' ? 'Demo mode' : 'Live AI'}
