@@ -3,24 +3,9 @@ import Groq from 'groq-sdk';
 import { z } from 'zod';
 import { Decision } from '@/lib/types';
 import { toolDefinitions, runTool } from '@/lib/tools';
+import { recommendationSchema, Recommendation} from '@/lib/recommendationSchema'
+import { runMockAssistant } from '@/lib/mockAssistant';
 
-
-
-// The model must return exactly this shape once it's done calling tools
-// If it doesnt, we reject the response rather than trust unvalidated output
-
-const recommendationSchema = z.object({
-  recommendedOptionId: z.string(),
-  explanation: z.string(),
-  tradeoffs: z.array(z.string()),
-  unresolvedQuestions: z.array(z.string()),
-  supportingFacts: z.array(z.string()),
-});
-
-
-
-
-export type Recommendation = z.infer<typeof recommendationSchema>;
 
 // interface to track the tools called and their success/failure for debugging and transparency of ai assistant
 
@@ -64,7 +49,7 @@ export async function POST(req: NextRequest) {
   try {
 
     const body = await req.json();
-    const { question, decision } = body as { question: string; decision: Decision };
+    const { question, decision , useMock} = body as { question: string; decision: Decision; useMock?: boolean };
 
     if (!question || typeof question !== 'string') {
       return NextResponse.json(
@@ -77,6 +62,14 @@ export async function POST(req: NextRequest) {
         { error: 'Missing or invalid "decision" in request body.', trace },
         { status: 400 }
       );
+    }
+
+
+     // ---- Mock/demo mode: user explicitly chose it, OR no API key is configured ----
+    const shouldUseMock = useMock === true || !process.env.GROQ_API_KEY;
+    if (shouldUseMock) {
+      const { recommendation, trace: mockTrace } = runMockAssistant(decision);
+      return NextResponse.json({ recommendation, trace: mockTrace, mode: 'mock' });
     }
 
     if (!process.env.GROQ_API_KEY) {

@@ -14,6 +14,8 @@ import {
 import RankingPanel from '@/components/RankingPanel';
 import OptionForm from '@/components/OptionForm';
 import ParticipantForm from '@/components/ParticipantForm';
+import AssistantPanel from '@/components/AssistantPnael';
+
 
 export default function Home() {
   const [decision, setDecision] = useState<Decision>(seedDecisions[0]);
@@ -248,6 +250,10 @@ export default function Home() {
       <section>
         <h2 className="text-lg font-semibold mb-3">Ranking</h2>
         <RankingPanel decision={decision} onEditOption={setEditingOptionId} onDeleteOption={deleteOption} />
+      </section>
+      <section>
+        <h2 className="text-lg font-semibold mb-3">Ask the AI Assistant</h2>
+        <AssistantPanel decision={decision} />
       </section>
     </main>
   );
