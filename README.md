@@ -17,7 +17,7 @@ Ever been in a situation where a group of people need to agree on something — 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) v18 or higher
-- A free [Groq API Key](https://console.groq.com/) (optional — the app works in Demo Mode without one)
+- A free [Groq API Key](https://console.groq.com/) (optional — the app works in both Demo Mode and also you can use AI model assistant without api key)
 
 ### Installation
 
