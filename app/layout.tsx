@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Decision Room",
-  description: "AI-Powered Decision Maker",
+  title: "AI Decision Room",
+  description: "Group decision-making powered by a deterministic constraint engine and AI assistant.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
