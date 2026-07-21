@@ -40,9 +40,9 @@ export default function OptionForm({ initial, domain, onSave, onCancel }: Props)
   };
 
   return (
-    <div className="border border-zinc-700 bg-zinc-800 rounded-xl p-4 space-y-3">
+    <div className="border border-slate-200 bg-slate-50 rounded-2xl p-5 space-y-4 shadow-sm">
       <input
-        className="w-full bg-zinc-900 border border-zinc-700 rounded px-3 py-2 text-zinc-100"
+        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all placeholder:text-slate-400 shadow-sm"
         placeholder="Option name"
         value={name}
         onChange={e => setName(e.target.value)}
@@ -51,17 +51,18 @@ export default function OptionForm({ initial, domain, onSave, onCancel }: Props)
         {schema.map(attr => (
           <div key={attr.key} className={attr.type === 'tags' ? 'col-span-2' : ''}>
             {attr.type === 'boolean' ? (
-              <label className="flex items-center gap-2 text-zinc-300 text-sm bg-zinc-900 border border-zinc-700 rounded px-3 py-2">
+              <label className="flex items-center gap-3 text-slate-700 text-sm bg-white border border-slate-200 rounded-xl px-4 py-2.5 cursor-pointer hover:bg-slate-50 transition-colors shadow-sm">
                 <input
                   type="checkbox"
                   checked={values[attr.key]}
                   onChange={e => updateValue(attr.key, e.target.checked)}
+                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 />
                 {attr.label}
               </label>
             ) : (
               <input
-                className="w-full bg-zinc-900 border border-zinc-700 rounded px-3 py-2 text-zinc-100"
+                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all placeholder:text-slate-400 shadow-sm"
                 type={attr.type === 'number' ? 'number' : 'text'}
                 placeholder={attr.type === 'tags' ? `${attr.label} (comma separated)` : attr.label}
                 value={values[attr.key]}
@@ -71,9 +72,9 @@ export default function OptionForm({ initial, domain, onSave, onCancel }: Props)
           </div>
         ))}
       </div>
-      <div className="flex gap-2 justify-end">
-        <button onClick={onCancel} className="px-3 py-1.5 text-sm text-zinc-400 hover:text-zinc-200">Cancel</button>
-        <button onClick={handleSave} className="px-3 py-1.5 text-sm bg-amber-400 text-zinc-900 rounded font-medium hover:bg-amber-300">
+      <div className="flex gap-3 justify-end pt-2">
+        <button onClick={onCancel} className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-200 rounded-lg transition-colors font-medium">Cancel</button>
+        <button onClick={handleSave} className="px-5 py-2 text-sm bg-gradient-to-r from-indigo-500 to-violet-600 text-white rounded-xl font-medium hover:from-indigo-600 hover:to-violet-700 transition-all shadow-md active:scale-95">
           Save option
         </button>
       </div>

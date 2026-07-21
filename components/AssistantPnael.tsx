@@ -74,11 +74,11 @@ export default function AssistantPanel({ decision }: Props) {
     : null;
 
   return (
-    <div className="border border-zinc-700 bg-zinc-800 rounded-xl p-4 space-y-4">
+    <div className="space-y-5">
       <div className="space-y-2">
         <div className="flex gap-2">
           <input
-            className="flex-1 bg-zinc-900 border border-zinc-700 rounded px-3 py-2 text-zinc-100 text-sm"
+            className="flex-1 bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all placeholder:text-slate-400 shadow-sm"
             placeholder="Ask the assistant, e.g. 'Which option should we pick?'"
             value={question}
             onChange={e => setQuestion(e.target.value)}
@@ -87,39 +87,39 @@ export default function AssistantPanel({ decision }: Props) {
           <button
             onClick={askAssistant}
             disabled={loading || !question.trim()}
-            className="px-4 py-2 text-sm bg-amber-400 text-zinc-900 rounded font-medium hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-5 py-2.5 text-sm bg-gradient-to-r from-indigo-500 to-violet-600 text-white rounded-xl font-medium hover:from-indigo-600 hover:to-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md active:scale-95"
           >
             {loading ? 'Thinking…' : 'Ask'}
           </button>
         </div>
-        <label className="flex items-center gap-2 text-xs text-zinc-500">
-          <input type="checkbox" checked={useMock} onChange={e => setUseMock(e.target.checked)} />
+        <label className="flex items-center gap-2 text-xs text-slate-500 cursor-pointer hover:text-slate-700 transition-colors">
+          <input type="checkbox" checked={useMock} onChange={e => setUseMock(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
           Use demo mode (no AI calls, deterministic engine only)
         </label>
       </div>
 
       {loading && (
-        <div className="flex items-center gap-2 text-sm text-zinc-400 py-4">
-          <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
-          <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse [animation-delay:150ms]" />
-          <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse [animation-delay:300ms]" />
+        <div className="flex items-center gap-2 text-sm text-indigo-600 py-4 font-medium animate-in fade-in duration-300">
+          <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" />
+          <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+          <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
           <span className="ml-2">{useMock ? 'Running deterministic engine…' : 'Consulting the AI assistant…'}</span>
         </div>
       )}
 
       {!loading && result?.error && (
-        <div className="text-sm text-red-400 border border-red-900 bg-red-950/30 rounded-lg p-3">
+        <div className="text-sm text-rose-700 border-l-4 border-rose-500 bg-rose-50 rounded-r-lg p-4 shadow-sm">
           {result.error}
         </div>
       )}
 
       {!loading && result?.recommendation && (
-        <div className="space-y-4">
+        <div className="space-y-5 bg-white p-5 rounded-xl border border-slate-200 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
           <div className="flex items-center gap-2">
             {result.mode && (
               <span
-                className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                  result.mode === 'mock' ? 'bg-zinc-700 text-zinc-300' : 'bg-amber-400 text-zinc-900'
+                className={`text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full font-bold ${
+                  result.mode === 'mock' ? 'bg-slate-100 text-slate-600 border border-slate-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
                 }`}
               >
                 {result.mode === 'mock' ? 'Demo mode' : 'Live AI'}
@@ -128,61 +128,61 @@ export default function AssistantPanel({ decision }: Props) {
           </div>
 
           {recommendedOption ? (
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Recommendation</p>
-              <p className="text-lg font-semibold text-amber-400">{recommendedOption.name}</p>
-              <p className="text-sm text-zinc-300 mt-1">{result.recommendation.explanation}</p>
+            <div className="space-y-1">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Recommendation</p>
+              <p className="text-xl font-extrabold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">{recommendedOption.name}</p>
+              <p className="text-base text-slate-800 mt-2 leading-relaxed font-medium">{result.recommendation.explanation}</p>
             </div>
           ) : (
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">No recommendation</p>
-              <p className="text-sm text-zinc-300">{result.recommendation.explanation}</p>
+            <div className="space-y-1">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">No recommendation</p>
+              <p className="text-base text-slate-800 leading-relaxed font-medium">{result.recommendation.explanation}</p>
             </div>
           )}
 
           {result.recommendation.tradeoffs.length > 0 && (
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Trade-offs</p>
-              <ul className="text-sm text-zinc-300 list-disc list-inside space-y-0.5">
+            <div className="bg-amber-50 p-4 rounded-xl border border-amber-100">
+              <p className="text-xs text-amber-800 uppercase tracking-widest font-bold mb-2">Trade-offs</p>
+              <ul className="text-sm text-amber-900 list-disc list-inside space-y-1">
                 {result.recommendation.tradeoffs.map((t, i) => <li key={i}>{t}</li>)}
               </ul>
             </div>
           )}
 
           {result.recommendation.unresolvedQuestions.length > 0 && (
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Unresolved questions</p>
-              <ul className="text-sm text-amber-300 list-disc list-inside space-y-0.5">
+            <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+              <p className="text-xs text-indigo-800 uppercase tracking-widest font-bold mb-2">Unresolved questions</p>
+              <ul className="text-sm text-indigo-900 list-disc list-inside space-y-1">
                 {result.recommendation.unresolvedQuestions.map((q, i) => <li key={i}>{q}</li>)}
               </ul>
             </div>
           )}
 
           {result.recommendation.supportingFacts.length > 0 && (
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Supporting facts</p>
-              <ul className="text-sm text-zinc-400 list-disc list-inside space-y-0.5">
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <p className="text-xs text-slate-600 uppercase tracking-widest font-bold mb-2">Supporting facts</p>
+              <ul className="text-sm text-slate-700 list-disc list-inside space-y-1">
                 {result.recommendation.supportingFacts.map((f, i) => <li key={i}>{f}</li>)}
               </ul>
             </div>
           )}
 
           {result.trace && result.trace.length > 0 && (
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Agent trace</p>
-              <div className="flex flex-wrap items-center gap-1 text-xs">
+            <div className="pt-2 border-t border-slate-100">
+              <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-2">Agent trace</p>
+              <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
                 {result.trace.map((t, i) => (
-                  <span key={i} className="flex items-center gap-1">
+                  <span key={i} className="flex items-center gap-2">
                     <span
-                      className={`px-2 py-1 rounded border ${
+                      className={`px-2.5 py-1 rounded-md border ${
                         t.status === 'success'
-                          ? 'border-zinc-700 bg-zinc-900 text-zinc-300'
-                          : 'border-red-800 bg-red-950/30 text-red-400'
+                          ? 'border-slate-200 bg-slate-50 text-slate-600'
+                          : 'border-rose-200 bg-rose-50 text-rose-600'
                       }`}
                     >
                       {t.tool} {t.status === 'success' ? '✓' : '✗'}
                     </span>
-                    {i < result.trace!.length - 1 && <span className="text-zinc-600">→</span>}
+                    {i < result.trace!.length - 1 && <span className="text-slate-300">→</span>}
                   </span>
                 ))}
               </div>
