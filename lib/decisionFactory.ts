@@ -2,16 +2,17 @@
 // functions for user to create their own manual decision, options and participiants without seeded or hardcocded data
 
 
-import { Decision, Option, Participant } from './types';
+import { Decision, Option, Participant , Domain} from './types';
 
 
 // Helper function to create a blank manual decision for user 
 
-export function createEmptyDecision(): Decision {
+export function createEmptyDecision(domain: Domain): Decision {
   return {
     id: crypto.randomUUID(),
     title: '',
     description: '',
+    domain,
     options: [],
     participants: [],
     createdAt: new Date().toISOString(),

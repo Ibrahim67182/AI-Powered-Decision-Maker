@@ -73,7 +73,7 @@ function evaluateConstraint(option: Option , constraint: Constraint): boolean {
 
 // type definition to represent the scored option with its disqualification status, reasons, score, and matched preferences
 
-interface ScoredOption {
+export interface ScoredOption {
   option: Option;
   disqualified: boolean;
   disqualifiedReasons: string[];   // which hard constraints failed, and whose
@@ -130,7 +130,7 @@ return decision.options.map(option => {
 
 // deifning the conflict type definition to represent the conflicts between the participants constraints and preferences in a decision
 
-interface Conflict {
+export interface Conflict {
   attribute: string;
   description: string;
   participantsInvolved: string[];

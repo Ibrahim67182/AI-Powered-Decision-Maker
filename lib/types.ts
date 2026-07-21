@@ -1,6 +1,51 @@
 
 // all the type definitions for the decision-making app 
 
+
+export type Domain = 'event' | 'service' | 'food';  // user can select one of these domains when creating a decision
+
+export interface AttributeDefinition {
+  key: string;
+  label: string;
+  type: 'number' | 'string' | 'boolean' | 'tags';
+}
+
+// Predefined attribute schema per domain — this is what keeps the app generic
+// while still giving users relevant fields instead of one hardcoded set.
+export const DOMAIN_ATTRIBUTES: Record<Domain, AttributeDefinition[]> = {
+  event: [
+    { key: 'cost', label: 'Cost', type: 'number' },
+    { key: 'venueType', label: 'Venue Type', type: 'string' },
+    { key: 'capacity', label: 'Capacity', type: 'number' },
+    { key: 'indoor', label: 'Indoor', type: 'boolean' },
+    { key: 'distanceMinutes', label: 'Distance (min)', type: 'number' },
+    { key: 'amenities', label: 'Amenities', type: 'tags' },
+  ],
+  service: [
+    { key: 'price', label: 'Price', type: 'number' },
+    { key: 'rating', label: 'Rating', type: 'number' },
+    { key: 'turnaroundDays', label: 'Turnaround (days)', type: 'number' },
+    { key: 'remote', label: 'Remote', type: 'boolean' },
+    { key: 'certifications', label: 'Certifications', type: 'tags' },
+  ],
+  food: [
+    { key: 'price', label: 'Price', type: 'number' },
+    { key: 'cuisine', label: 'Cuisine', type: 'string' },
+    { key: 'dietaryTags', label: 'Dietary Tags', type: 'tags' },
+    { key: 'outdoor', label: 'Outdoor Seating', type: 'boolean' },
+    { key: 'distanceMinutes', label: 'Distance (min)', type: 'number' },
+  ],
+};
+
+export const DOMAIN_LABELS: Record<Domain, string> = {
+  event: 'Event',
+  service: 'Service',
+  food: 'Food Planning',
+};
+
+
+
+
 export type ConstraintType = 'hard' | 'soft';
 
 
@@ -62,6 +107,7 @@ export interface Decision {
   id: string;
   title: string;
   description?: string;
+  domain: Domain;
   options: Option[];
   participants: Participant[];
   createdAt: string;
